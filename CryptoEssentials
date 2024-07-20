@@ -1,0 +1,43 @@
+# scripts/crypto_inspection.py
+
+import requests
+import pandas as pd
+
+def fetch_crypto_data(api_url, crypto_id):
+    """
+    Fetch cryptocurrency data from an API.
+    
+    :param api_url: Base URL of the cryptocurrency API
+    :param crypto_id: ID of the cryptocurrency to fetch data for
+    :return: DataFrame with cryptocurrency data
+    """
+    response = requests.get(f'{api_url}/cryptocurrencies/{crypto_id}')
+    response.raise_for_status()
+    data = response.json()
+    df = pd.DataFrame([data])
+    return df
+
+def inspect_crypto_data(df):
+    """
+    Inspect cryptocurrency data.
+    
+    :param df: DataFrame with cryptocurrency data
+    :return: Inspection results as DataFrame
+    """
+    inspection = {
+        'crypto_id': df['id'].iloc[0],
+        'name': df['name'].iloc[0],
+        'symbol': df['symbol'].iloc[0],
+        'market_cap': df['market_cap'].iloc[0],
+        'price': df['price'].iloc[0]
+    }
+    inspection_df = pd.DataFrame([inspection])
+    return inspection_df
+
+# Example usage:
+# api_url = 'https://api.cryptocurrency.example.com'
+# crypto_id = 'crypto_123'
+# crypto_data_df = fetch_crypto_data(api_url, crypto_id)
+# print(crypto_data_df)
+# crypto_inspection_df = inspect_crypto_data(crypto_data_df)
+# print(crypto_inspection_df)
